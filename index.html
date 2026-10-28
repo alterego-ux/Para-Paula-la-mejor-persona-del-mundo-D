@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#5b1835">
+  <meta name="description" content="Entre Líneas: un espacio personal para guardar ideas, notas y recuerdos.">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Entre Líneas — espacio personal</title>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+      <div class="brand-row">
+        <a href="#inicio" class="brand-mark" aria-label="Entre Líneas, inicio"><span class="brand-symbol">e<span>·</span></span></a>
+        <div class="brand-copy"><div class="brand-name" id="brandName">Entre Líneas</div><div class="brand-sub">ESPACIO PERSONAL</div></div>
+        <button class="icon-btn sidebar-collapse" id="collapseSidebar" aria-label="Contraer menú" title="Contraer menú"><span data-icon="panel-left"></span></button>
+      </div>
+      <div class="profile-chip"><div class="avatar">P</div><div class="profile-copy"><strong id="profileName">Paula</strong><span>Un espacio solo tuyo</span></div><span class="private-dot" title="Datos guardados en este navegador"></span></div>
+      <button class="primary-button new-note" id="newNoteBtn"><span data-icon="plus"></span><span>Nueva nota</span><kbd>N</kbd></button>
+      <button class="quick-capture" id="quickCaptureBtn"><span data-icon="inbox"></span><span>Capturar una idea</span><kbd>Q</kbd></button>
+      <nav class="nav-groups">
+        <div class="nav-label">TU ESPACIO</div>
+        <button class="nav-item active" data-view="inicio"><span data-icon="house"></span><span>Inicio</span></button>
+        <button class="nav-item" data-view="inbox"><span data-icon="inbox"></span><span>Bandeja de entrada</span><span class="nav-count" id="inboxCount"></span></button>
+        <button class="nav-item" data-view="notas"><span data-icon="notebook-pen"></span><span>Todas las notas</span></button>
+        <button class="nav-item" data-view="borradores"><span data-icon="file-pen-line"></span><span>Borradores</span></button>
+        <button class="nav-item" data-view="diario"><span data-icon="book-open"></span><span>Diario personal</span></button>
+        <button class="nav-item" data-view="favoritos"><span data-icon="star"></span><span>Favoritos</span></button>
+        <button class="nav-item" data-view="tareas"><span data-icon="check-square"></span><span>Tareas</span></button>
+        <button class="nav-item" data-view="calendario"><span data-icon="calendar-days"></span><span>Calendario</span></button>
+        <button class="nav-item" data-view="colecciones"><span data-icon="table-2"></span><span>Colecciones</span></button>
+        <div class="nav-label nav-label-spaced">ORGANIZACIÓN</div>
+        <div class="section-line"><span>CARPETAS</span><button class="tiny-icon" id="addFolderBtn" title="Crear carpeta" aria-label="Crear carpeta"><span data-icon="plus"></span></button></div>
+        <div id="folderNav" class="folder-nav"></div>
+        <button class="nav-item" data-view="archivados"><span data-icon="archive"></span><span>Archivados</span></button>
+        <button class="nav-item" data-view="papelera"><span data-icon="trash-2"></span><span>Papelera</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="local-status"><span class="status-pip"></span><span>Guardado en este dispositivo</span></div>
+        <button class="nav-item" data-view="configuracion"><span data-icon="settings-2"></span><span>Configuración</span></button>
+        <div class="sidebar-footnote">Hecho para escribir sin prisa.</div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="mobile-brand"><button class="icon-btn" id="mobileMenuBtn" aria-label="Abrir menú"><span data-icon="menu"></span></button><span class="mobile-brand-name">Entre Líneas</span></div>
+        <div class="breadcrumbs" id="breadcrumbs"><span>Tu espacio</span><span class="crumb-sep">/</span><strong>Inicio</strong></div>
+        <div class="top-actions">
+          <button class="search-trigger" id="searchTrigger"><span data-icon="search"></span><span>Buscar en todo</span><kbd>⌘ K</kbd></button>
+          <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Cambiar tema" title="Cambiar tema"><span data-icon="moon"></span></button>
+          <button class="avatar avatar-small" id="profileButton" aria-label="Perfil y preferencias">P</button>
+        </div>
+      </header>
+      <section id="appContent" class="content-area" tabindex="-1" aria-live="polite"></section>
+      <footer class="app-footer"><span>Entre Líneas</span><span class="footer-dot">·</span><span>Tus palabras, en su lugar.</span><span class="footer-storage" id="storageStatus">Almacenamiento local activo</span></footer>
+    </main>
+  </div>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"></section>
+  </div>
+  <div class="search-overlay" id="searchOverlay" hidden>
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-label="Buscar en Entre Líneas">
+      <div class="search-input-row"><span data-icon="search"></span><input id="globalSearch" type="search" placeholder="Busca palabras, notas, tareas…" autocomplete="off"><kbd>ESC</kbd></div>
+      <div id="searchResults" class="search-results"><div class="search-hint">Escribe para buscar en tu espacio.</div></div>
+      <div class="search-bottom"><span>Busca en títulos y contenido local</span><span><kbd>↑</kbd> <kbd>↓</kbd> para moverte</span></div>
+    </div>
+  </div>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

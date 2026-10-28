@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#5b1835">
+  <title>Prueba local de persistencia — Entre Líneas</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body{padding:26px}.test-wrap{max-width:780px;margin:0 auto}.test-header{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:20px}.test-list{display:grid;gap:10px;margin:18px 0}.test-item{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--line);background:var(--white);border-radius:10px;padding:12px}.test-state{color:var(--green);font-weight:700}.test-state.fail{color:var(--red)}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--white);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:11px;max-height:200px;overflow:auto}
+  </style>
+</head>
+<body>
+  <main class="test-wrap">
+    <div class="test-header"><div class="eyebrow">DIAGNÓSTICO LOCAL · DATOS SINTÉTICOS</div><h1 class="page-title">Prueba de persistencia</h1><p class="page-subtitle">Crea una nota de prueba extensa en IndexedDB y vuelve a cargar esta página para comprobar si el navegador conserva el contenido. La prueba usa texto ficticio; no incluyas información personal.</p></div>
+    <div id="testResults" class="test-list"><div class="test-item"><span>…</span><div><strong>Comprobando estado</strong><p class="muted-small">Abriendo IndexedDB.</p></div></div></div>
+    <div class="header-actions"><button class="button" id="createTest">Crear / actualizar prueba extensa</button><button class="button-secondary" id="reloadTest">Recargar para verificar</button><button class="button-danger" id="cleanupTest">Eliminar datos de prueba</button><a class="button-secondary" href="../index.html">Volver a la aplicación</a></div>
+    <p class="page-subtitle">Esta comprobación demuestra persistencia del navegador. Para verificar también el temporizador de autoguardado, el diario, los recordatorios y las copias, sigue el plan manual del archivo README.</p>
+  </main>
+  <script type="module">
+    import { openDB, getOne, putOne, deleteOne } from '../js/db.js';
+    const results=document.querySelector('#testResults');
+    const id='__entre-lineas-persistence-test__';
+    const fakeParagraph='Texto sintético de persistencia. Este párrafo sirve para comprobar la conservación de caracteres, acentos, saltos de línea y documentos largos. ';
+    const longText=Array.from({length:240},(_,i)=>`Párrafo ${i+1}. ${fakeParagraph.repeat(8)}`).join('\n\n');
+    function row(title,ok,details){const el=document.createElement('div');el.className='test-item';el.innerHTML=`<span class="test-state ${ok?'':'fail'}">${ok?'✓':'!'}</span><div><strong>${title}</strong><p class="muted-small">${details}</p></div>`;return el;}
+    async function run(){try{await openDB();const found=await getOne('notes',id);results.replaceChildren();results.append(row('IndexedDB disponible',true,'Se pudo abrir la misma base local que utiliza Entre Líneas.'));if(found){const exact=found.content===longText;results.append(row('Prueba recuperada tras recarga',exact,`${(found.content||'').length.toLocaleString('es-CO')} caracteres almacenados; ${found.content===longText?'el contenido coincide exactamente.':'el texto no coincide con el contenido de prueba actual.'}`));results.append(row('Saltos de línea',found.content.includes('\n\n'),`${(found.content.match(/\n\n/g)||[]).length.toLocaleString('es-CO')} separadores de párrafo encontrados.`));}else{results.append(row('Sin prueba anterior',false,'Pulsa “Crear / actualizar prueba extensa”, espera a que confirme y luego pulsa “Recargar para verificar”.'));}}catch(e){results.replaceChildren(row('No se pudo abrir IndexedDB',false,e.message||'Error de almacenamiento.'));}}
+    document.querySelector('#createTest').addEventListener('click',async()=>{try{const now=new Date().toISOString();await putOne('notes',{id,type:'test',title:'PRUEBA — nota extensa de persistencia',content:longText,tags:['prueba'],createdAt:now,updatedAt:now,inbox:false,state:'active',favorite:false,folderId:null,archivedAt:null,deletedAt:null});results.replaceChildren(row('Texto sintético guardado',true,`${longText.length.toLocaleString('es-CO')} caracteres en múltiples párrafos; la transacción de IndexedDB completó.`),row('Siguiente paso',true,'Recarga esta página para comprobar que la misma información se puede leer de nuevo.'));}catch(e){results.replaceChildren(row('Error de escritura',false,e.message||'No se pudo escribir en IndexedDB.'));}});
+    document.querySelector('#reloadTest').addEventListener('click',()=>location.reload());
+    document.querySelector('#cleanupTest').addEventListener('click',async()=>{try{await deleteOne('notes',id);results.replaceChildren(row('Prueba eliminada',true,'Se quitó el registro sintético de la base local.'));}catch(e){results.replaceChildren(row('No se pudo limpiar',false,e.message||'Error de eliminación.'));}});
+    run();
+  </script>
+</body>
+</html>

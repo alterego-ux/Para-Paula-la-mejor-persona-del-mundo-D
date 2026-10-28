@@ -1,0 +1,12 @@
+{
+  "name": "Entre Líneas — espacio personal",
+  "short_name": "Entre Líneas",
+  "description": "Un espacio personal para guardar ideas, notas y recuerdos.",
+  "lang": "es-CO",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f2eb",
+  "theme_color": "#5b1835",
+  "icons": [{ "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
